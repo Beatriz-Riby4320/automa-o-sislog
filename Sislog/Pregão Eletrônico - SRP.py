@@ -14,7 +14,7 @@ with sync_playwright() as p:
     page.get_by_role('link', name='Contratações', exact=True).click()
     page.wait_for_load_state('networkidle')
 
-    page.select_option('#comboModalidades', label='Pregão Eletrônico')
+    page.select_option('#comboModalidades', label='Pregão Eletrônico - SRP')
     page.dispatch_event('#comboModalidades', 'change')
 
     page.select_option('#comboStatus', label='Em Andamento')
@@ -48,8 +48,3 @@ with sync_playwright() as p:
                     print(f"Nº Contratação: {num_contratacao} | Publicação: {data_publicacao_str}")
             except ValueError:
                 print(f"Data inválida na linha {i}: {data_publicacao_str}")
-
-
-
-
-

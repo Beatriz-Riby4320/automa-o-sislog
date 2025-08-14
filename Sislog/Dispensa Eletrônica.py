@@ -2,7 +2,7 @@ from playwright.sync_api import sync_playwright
 from datetime import datetime
 
 # Define o intervalo de datas desejado
-data_inicio = datetime.strptime("08/08/2025", "%d/%m/%Y")
+data_inicio = datetime.strptime("07/08/2025", "%d/%m/%Y")
 data_fim = datetime.strptime("14/08/2025", "%d/%m/%Y")
 
 with sync_playwright() as p:
@@ -14,7 +14,7 @@ with sync_playwright() as p:
     page.get_by_role('link', name='Contratações', exact=True).click()
     page.wait_for_load_state('networkidle')
 
-    page.select_option('#comboModalidades', label='Pregão Eletrônico')
+    page.select_option('#comboModalidades', label='Dispensa Eletrônica')
     page.dispatch_event('#comboModalidades', 'change')
 
     page.select_option('#comboStatus', label='Em Andamento')
