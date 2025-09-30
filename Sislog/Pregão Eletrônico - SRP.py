@@ -2,8 +2,8 @@ from playwright.sync_api import sync_playwright
 from datetime import datetime
 
 # Define o intervalo de datas desejado
-data_inicio = datetime.strptime("08/08/2025", "%d/%m/%Y")
-data_fim = datetime.strptime("14/08/2025", "%d/%m/%Y")
+data_inicio = datetime.strptime("23/09/2025", "%d/%m/%Y")
+data_fim = datetime.strptime("30/09/2025", "%d/%m/%Y")
 
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=False)
@@ -39,12 +39,13 @@ with sync_playwright() as p:
 
         if len(texto_colunas) >= 7:
             num_contratacao = texto_colunas[1]
+            objeto = texto_colunas[3]                  # Objeto (coluna 4)
             data_publicacao_str = texto_colunas[5]
 
             try:
                 data_publicacao = datetime.strptime(data_publicacao_str, "%d/%m/%Y %H:%M")
                 # Compara apenas a data (sem hora)
                 if data_inicio.date() <= data_publicacao.date() <= data_fim.date():
-                    print(f"Nº Contratação: {num_contratacao} | Publicação: {data_publicacao_str}")
+                    print(f"Nº Contratação: {num_contratacao} | Publicação: {data_publicacao_str} | Objeto: {objeto}")
             except ValueError:
                 print(f"Data inválida na linha {i}: {data_publicacao_str}")
