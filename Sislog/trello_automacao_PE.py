@@ -13,7 +13,7 @@ BOARD_ID = os.getenv("BOARD_ID")
 LIST_ID = os.getenv("LIST_ID")  # Aguardando Julgamento
 
 # 🏷️ Nomes das etiquetas desejadas (corrigido para usar etiquetas existentes)
-ETIQUETAS_DESEJADAS = ["SISLOG", "PE"]
+ETIQUETAS_DESEJADAS = ["SISLOG", "PE"] # Colocar Etiqueta desejada
 
 def buscar_etiquetas():
     url = f"https://api.trello.com/1/boards/{BOARD_ID}/labels?key={API_KEY}&token={TOKEN}"
@@ -47,7 +47,8 @@ def criar_cartao(titulo, descricao, data_inicio, data_fim, etiquetas_ids):
         "desc": descricao,
         "idLabels": ",".join(etiquetas_ids),
         "start": data_inicio.isoformat(),
-        "due": data_fim.isoformat()
+        "due": data_fim.isoformat(),
+        "dueReminder": 1440
     }
     res = requests.post(url, params=params)
     if res.status_code != 200:
@@ -79,7 +80,18 @@ def processar_contratacoes(contratacoes):
         link = item["link"]
 
         titulo = f"{num_contratacao} - {orgao}"
-        descricao = f"Número do Pregão: {num_pregao}\nObjeto: {objeto}"
+        descricao = (
+    f"Número do Pregão: {num_pregao}\n" # Alterado de "Número da Dispensa" para "Número do Pregão"
+    f"Objeto: {objeto}\n"
+    f"SRP: ( ) SIM   (x) NÃO\n"# Para indicar que é SRP
+    f"Validade da proposta:\n"
+    f"Prazo de entrega:\n\n"
+    f"---\n"
+    f"- [PRECIFICAÇÃO](https://drive.google.com/drive/folders/1_g1vjOInpi6eE39NT7i2mu_UXnV5ybNT?usp=drive_link)\n"
+    f"- [MODELO DE PROPOSTA](https://drive.google.com/drive/folders/1HVPRUZqfZKVwly3_cwSvtpUMJ3_hoDTB?usp=drive_link)\n"
+    f"- [ARQUIVO C/+ DE 10 MB](https://drive.google.com/drive/folders/1i8QRCa88vmmkAN_qgOZvL4nWavO2uQx7?usp=drive_link)\n"
+    f"- [PASTA DE APOIO](https://drive.google.com/drive/folders/1gBKK0MRd3eTEABUAQkFdbv6rh789qq-M?usp=drive_link)"
+)
 
         card = criar_cartao(titulo, descricao, data_inicio, data_fim, etiquetas_ids)
         if card and "id" in card:

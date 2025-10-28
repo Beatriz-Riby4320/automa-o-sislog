@@ -1,10 +1,14 @@
 from playwright.sync_api import sync_playwright
-from datetime import datetime
-from trello_automacao import processar_contratacoes
+from datetime import datetime, timedelta, timezone
+from trello_automacao_DE import processar_contratacoes # Importa a função correta
+
+fuso_brasilia = timezone(timedelta(hours=-3))
+
 
 # Intervalo de datas desejado
 data_inicio = datetime.strptime("15/10/2025", "%d/%m/%Y")
-data_fim = datetime.strptime("16/10/2025", "%d/%m/%Y")
+data_fim = datetime.strptime("27/10/2025", "%d/%m/%Y").replace(hour=23, minute=59)
+
 
 contratacoes = []
 
@@ -17,7 +21,7 @@ with sync_playwright() as p:
     page.get_by_role('link', name='Contratações', exact=True).click()
     page.wait_for_load_state('networkidle')
 
-    page.select_option('#comboModalidades', label='Pregão Eletrônico')
+    page.select_option('#comboModalidades', label='Dispensa Eletrônica') # Selecionar modalidade
     page.dispatch_event('#comboModalidades', 'change')
 
     page.select_option('#comboStatus', label='Em Andamento')
@@ -49,8 +53,9 @@ with sync_playwright() as p:
             data_fim_str = texto_colunas[6]
 
             try:
-                data_publicacao = datetime.strptime(data_publicacao_str, "%d/%m/%Y %H:%M")
-                data_encerramento = datetime.strptime(data_fim_str, "%d/%m/%Y %H:%M")
+                data_publicacao = datetime.strptime(data_publicacao_str, "%d/%m/%Y %H:%M").replace(tzinfo=fuso_brasilia)
+                data_encerramento = datetime.strptime(data_fim_str, "%d/%m/%Y %H:%M").replace(tzinfo=fuso_brasilia)
+
 
                 if data_inicio.date() <= data_publicacao.date() <= data_fim.date():
                     link_element = colunas.nth(1).locator('a')
