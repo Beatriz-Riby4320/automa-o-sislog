@@ -3,8 +3,8 @@ from datetime import datetime
 from trello_automacao import processar_contratacoes
 
 # Intervalo de datas desejado
-data_inicio = datetime.strptime("01/10/2025", "%d/%m/%Y")
-data_fim = datetime.strptime("14/10/2025", "%d/%m/%Y")
+data_inicio = datetime.strptime("15/10/2025", "%d/%m/%Y")
+data_fim = datetime.strptime("16/10/2025", "%d/%m/%Y")
 
 contratacoes = []
 
